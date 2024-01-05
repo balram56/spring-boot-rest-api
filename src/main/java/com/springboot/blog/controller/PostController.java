@@ -80,7 +80,9 @@ public class PostController {
             responseCode = "200",
             description = "Http Status 200 SUCCESS"
     )
-    @GetMapping("/api/v1/posts/{id}")
+   // @GetMapping(value = "/api/posts/{id}", params = "version=1" )//query parameter
+   // @GetMapping(value = "/api/posts/{id}", headers = "X-API-VERSION=1")//versioning through custom headers
+    @GetMapping(value = "/api/posts/{id}", produces = "application/vnd.javaguides.v1+json")//versioning through content negotiation
     public ResponseEntity<PostDto> getPostByIdV1(
             @PathVariable(name = "id") long id){
         return ResponseEntity.ok(postService.getPostById(id));
@@ -88,7 +90,12 @@ public class PostController {
 
     //for versioning by uri path
     //get by id with tags
-    @GetMapping("/api/v2/posts/{id}")
+    //http://localhost:8080/api/v2/posts/1  -> for path uri
+    //http://localhost:8080/api/posts/1?version=2  //query parameter
+
+    // @GetMapping(value = "/api/posts/{id}", params = "version=2") //query parameter
+  // @GetMapping(value = "/api/posts/{id}", headers = "X-API-VERSION=2")//versioning through custom headers
+    @GetMapping(value = "/api/posts/{id}",produces = "application/vnd.javaguides.v2+json")
     public ResponseEntity<PostDtoV2> getPostByIdV2(
             @PathVariable(name = "id") long id){
         PostDto postDto = postService.getPostById(id);
